@@ -2,13 +2,13 @@
 
 Video Annotation Tool is a web app with a NodeJS back end and a ReactJS front end. Linked to your own AWS S3 bucket and Postgres database, this tool will allow users to annotate frames of videos with a drag-and-drop box. Whenever an annotation is made, an image of the annotation will be captured and sent to the appropriate folder in your S3 bucket. You can then use these annotations to train neural networks to predict future annotations!
 
-Our own app used for deep sea annotations is live [here](https://www.deepseaannotations.com/).
+The project this repo was forked from was used for deep sea annotations and is live [here](https://www.deepseaannotations.com/).
 
 ## Installation
-### Envrionment
+### Environment
 To set up the project environment, run the following commands.
 ```
-git clone git@github.com:ishaanj1/video-annotation-tool.git
+git clone git@github.com:skygordon/video-annotation-tool.git
 cd video-annotation-tool/
 sudo apt install npm
 npm install
