@@ -34,7 +34,7 @@ To create the instances, you can reference [this tutorial](https://docs.aws.amaz
 
 **Tracking Instance**   
   * When creating this instance, make sure to add extra storage space (NOT MEMORY, 32Gigs on an ssd should be enough). We used a c5.4xlarge.
-  1. On this EC2 you will need to install OpenCV. Note this is a somewhat lengthy process. Here is a link to the [tutorial](https://www.pyimagesearch.com/2015/07/20/install-opencv-3-0-and-python-3-4-on-ubuntu/). **IMPORTANT!** Before setting up the build in step 3, make sure you add '-DWITH_FFMPEG=ON' to the 'cmake -D' command.
+  1. On this EC2 you will need to install OpenCV. Note this is a somewhat lengthy process. Here is a link to the [tutorial](https://www.pyimagesearch.com/2016/10/24/ubuntu-16-04-how-to-install-opencv/). **IMPORTANT!** Before setting up the build in step 3, make sure you add '-DWITH_FFMPEG=ON' to the 'cmake -D' command.
   2. Once you are done installing OpenCV, you will have to pip install a bunch of packages (Make sure to be doing everything on python 3.6 and in your virtual env (usually named 'cv'))
 ```
    pip install python-dotenv
@@ -42,14 +42,15 @@ To create the instances, you can reference [this tutorial](https://docs.aws.amaz
    pip install Pillow
    pip install scikit-image
    pip install imutils
-   pip install PyGreSQL
    pip install numpy
    sudo apt install ffmpeg
    sudo apt-get install libpq-dev
+   pip install PyGreSQL
    ```
    3. Your tracking EC2 is ready to go! Just run  
 ``` 
-   cd aiAnnotations  
+   cd video-annotation-tool
+   cd trackingAnnotations  
    nohup python trackAll.py &
 ```  
   * This will automatically generate a new video that tracks an object whenever an annotation is made. The video will be stored in your videos folder within your S3 bucket, and can be viewed in the report tab of the website.
