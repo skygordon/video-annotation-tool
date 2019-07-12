@@ -49,6 +49,7 @@ To create the instances, you can reference [this tutorial](https://docs.aws.amaz
    ```
    3. Your tracking EC2 is ready to go! Just run  
 ``` 
+   cd ~
    cd video-annotation-tool
    cd trackingAnnotations  
    nohup python trackAll.py &
