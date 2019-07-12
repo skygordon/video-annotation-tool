@@ -8,7 +8,7 @@ The project this repo was forked from was used for deep sea annotations and is l
 ### Environment
 To set up the project environment, run the following commands.
 ```
-git clone git@github.com:skygordon/video-annotation-tool.git
+git clone https://github.com/skygordon/video-annotation-tool.git
 cd video-annotation-tool/
 sudo apt install npm
 npm install
