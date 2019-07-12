@@ -59,7 +59,7 @@ To create the instances, you can reference [this tutorial](https://docs.aws.amaz
   * Note: This script runs constantly, always looking for a new annotation to track.  
 
 **Training Instance**  
-  * For this instance, we recommend a much larger EC2 with more GPUs, like a g3.16x large.
+  * For this instance, we recommend a much larger EC2 with more GPUs, like a g3.16xlarge.
   1. Install keras-retinanet following instructions from [their repo](https://github.com/fizyr/keras-retinanet)
   2. Run `pip install -r ml/requirements.txt`
   3. In order to run training on startup by the webserver run:
