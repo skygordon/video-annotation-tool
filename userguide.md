@@ -34,7 +34,7 @@ To create the instances, you can reference [this tutorial](https://docs.aws.amaz
 
 **Tracking Instance**   
   * When creating this instance, make sure to add extra storage space (NOT MEMORY, 32Gigs on an ssd should be enough). We used a c5.4xlarge.
-  1. On this EC2 you will need to install OpenCV. Note this is a somewhat lengthy process. Here is a link to the [tutorial](https://www.pyimagesearch.com/2016/10/24/ubuntu-16-04-how-to-install-opencv/). **IMPORTANT!** Before setting up the build in step 3, make sure you add '-DWITH_FFMPEG=ON' to the 'cmake -D' command.
+  1. On this EC2 you will need to install OpenCV. Note this is a somewhat lengthy process. Here is a link to the [tutorial for Ubuntu 16.04](https://www.pyimagesearch.com/2016/10/24/ubuntu-16-04-how-to-install-opencv/) and here's the [tutorial if you opt for using Ubuntu 18.04](https://www.pyimagesearch.com/2018/05/28/ubuntu-18-04-how-to-install-opencv/). **IMPORTANT!** Before setting up the build in step 3, make sure you add '-DWITH_FFMPEG=ON' to the 'cmake -D' command.
   2. Once you are done installing OpenCV, you will have to pip install a bunch of packages (Make sure to be doing everything on python 3.6 and in your virtual env (usually named 'cv'))
 ```
    pip install python-dotenv
