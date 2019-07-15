@@ -16,6 +16,17 @@ cd client/
 npm install
 cd ..
 ```
+
+if  you get the following error when running ```sudo apt-get install npm```
+```
+E: Unable to locate package npm
+```
+run the following lines
+```
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+sudo apt-get install -y nodejs
+```
+
 ### Setting up your AWS account
 Our project relies entirely upon AWS for hosting our database, webserver, video/image files, and machine learning EC2 instances. You will need to set up the various Amazon Web Services to be able to use the source code.
 
