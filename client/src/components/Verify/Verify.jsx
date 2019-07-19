@@ -6,11 +6,9 @@ import Paper from "@material-ui/core/Paper";
 
 import VerifySelection from "./VerifySelection.jsx";
 import VerifyAnnotations from "./VerifyAnnotations.jsx";
+import { Button, Typography } from "@material-ui/core";
 
 const styles = theme => ({
-  root: {
-    width: "90%"
-  },
   button: {
     margin: theme.spacing()
   },
@@ -50,9 +48,10 @@ class Verify extends Component {
       selectionMounted: true,
       /* -1 represents select all */
       selectedUsers: [],
-      selectedVideos: ["-1"],
-      selectedConcepts: ["-1"],
+      selectedVideos: [],
+      selectedConcepts: [],
       selectedUnsure: false,
+      selectedTrackingFirst: false,
       annotations: [],
       error: null,
       index: 0
@@ -62,14 +61,24 @@ class Verify extends Component {
   toggleSelection = async () => {
     let annotations = [];
     if (!this.state.selectionMounted) {
-      this.resetState();
+      this.resetState(this.setState({
+        selectionMounted: !this.state.selectionMounted,
+        noAnnotations: false
+      }))
     } else {
       annotations = await this.getAnnotations();
+      if (annotations.length < 1){
+        this.setState({
+          noAnnotations: true,
+          selectionMounted: !this.state.selectionMounted
+        })
+      } else {
+        this.setState({
+          annotations: annotations,
+          selectionMounted: !this.state.selectionMounted
+        });
+      }
     }
-    this.setState({
-      annotations: annotations,
-      selectionMounted: !this.state.selectionMounted
-    });
   };
 
   getUsers = async () => {
@@ -88,9 +97,10 @@ class Verify extends Component {
 
   getVideos = async () => {
     return axios
-      .get(`/api/unverifiedVideosByUser/`, {
+      .get(`/api/annotations/verified`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
         params: {
+          verifiedOnly: "-1",
           selectedUsers: this.state.selectedUsers
         }
       })
@@ -104,7 +114,7 @@ class Verify extends Component {
 
   getVideoCollections = async () => {
     return axios
-      .get(`/api/videoCollections`, {
+      .get(`/api/collections/videos`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("token") }
       })
       .then(res => res.data)
@@ -117,12 +127,13 @@ class Verify extends Component {
 
   getConcepts = async () => {
     return axios
-      .get(`/api/unverifiedConceptsByUserVideo/`, {
+      .get(`/api/annotations/verified`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token")
         },
         params: {
+          verifiedOnly: "-1",
           selectedUsers: this.state.selectedUsers,
           selectedVideos: this.state.selectedVideos
         }
@@ -137,12 +148,13 @@ class Verify extends Component {
 
   getUnsure = async () => {
     return axios
-      .get(`/api/unverifiedUnsureByUserVideoConcept`, {
+      .get(`/api/annotations/verified`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token")
         },
         params: {
+          verifiedOnly: "-1",
           selectedUsers: this.state.selectedUsers,
           selectedVideos: this.state.selectedVideos,
           selectedConcepts: this.state.selectedConcepts
@@ -158,16 +170,18 @@ class Verify extends Component {
 
   getAnnotations = async () => {
     return axios
-      .get(`/api/unverifiedAnnotationsByUserVideoConceptUnsure/`, {
+      .get(`/api/annotations/verified`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token")
         },
         params: {
+          verifiedOnly: this.state.selectedTrackingFirst ? "1" : "-1",
           selectedUsers: this.state.selectedUsers,
           selectedVideos: this.state.selectedVideos,
           selectedConcepts: this.state.selectedConcepts,
-          selectedUnsure: this.state.selectedUnsure
+          selectedUnsure: this.state.selectedUnsure,
+          selectedTrackingFirst: this.state.selectedTrackingFirst
         }
       })
       .then(res => res.data)
@@ -203,7 +217,7 @@ class Verify extends Component {
           [type]: ["-1"]
         });
       } else {
-        if (this.state[type].length === 1 && this.state[type][0] === "-1") {
+        if (this.state[type][0] === "-1") {
           this.setState({
             [type]: [event.target.value]
           });
@@ -229,17 +243,18 @@ class Verify extends Component {
         return;
       case 1:
         this.setState({
-          selectedVideos: ["-1"]
+          selectedVideos: []
         });
         return;
       case 2:
         this.setState({
-          selectedConcepts: ["-1"]
+          selectedConcepts: []
         });
         return;
       case 3:
         this.setState({
-          selectedUnsure: false
+          selectedUnsure: false,
+          selectedTrackingFirst: false
         });
         return;
       default:
@@ -247,14 +262,17 @@ class Verify extends Component {
     }
   };
 
-  resetState = () => {
+  resetState = (callback) => {
     this.setState({
       selectedUsers: [],
-      selectedVideos: ["-1"],
-      selectedConcepts: ["-1"],
+      selectedVideos: [],
+      selectedConcepts: [],
       selectedUnsure: false,
+      selectedTrackingFirst: false,
       index: 0
-    });
+    },
+    callback
+    );
   };
 
   handleNext = callback => {
@@ -275,6 +293,7 @@ class Verify extends Component {
           selectedVideos={this.state.selectedVideos}
           selectedConcepts={this.state.selectedConcepts}
           selectedUnsure={this.state.selectedUnsure}
+          selectedTrackingFirst={this.state.selectedTrackingFirst}
           getUsers={this.getUsers}
           getVideos={this.getVideos}
           getVideoCollections={this.getVideoCollections}
@@ -289,6 +308,28 @@ class Verify extends Component {
           selectUser={this.selectUser}
         />
       );
+    } else if (this.state.noAnnotations){
+      selection = (
+        <Paper
+        square
+        elevation={0}
+        className={this.props.classes.resetContainer}
+        >
+          <Typography>
+          All Tracking Videos Verified
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => this.resetState(this.setState({
+              selectionMounted: !this.state.selectionMounted,
+              noAnnotations: false
+            }))}
+          >
+            Reset
+          </Button>
+        </Paper>
+      )
     } else {
       selection = (
         <Paper
@@ -302,6 +343,7 @@ class Verify extends Component {
             handleNext={this.handleNext}
             toggleSelection={this.toggleSelection}
             size={this.state.annotations.length}
+            tracking={this.state.selectedTrackingFirst}
           />
         </Paper>
       );

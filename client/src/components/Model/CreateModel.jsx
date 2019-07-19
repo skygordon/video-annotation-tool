@@ -136,7 +136,7 @@ class CreateModel extends Component {
       }
     };
     axios
-      .get(`/api/model/concepts`, config)
+      .get(`/api/models/concepts`, config)
       .then(res => {
         this.setState({
           concepts: res.data
@@ -159,14 +159,14 @@ class CreateModel extends Component {
     };
     axios.get(`/api/videos`, config).then(res => {
       this.setState({
-        videos: res.data[2].rows
+        videos: res.data.watchedVideos
       });
     });
   };
 
   loadVideoCollections = async () => {
     return axios
-      .get(`/api/videoCollections`, {
+      .get(`/api/collections/videos`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("token") }
       })
       .then(res => {

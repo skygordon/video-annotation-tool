@@ -10,6 +10,8 @@ import Swal from "sweetalert2";
 import CollectionList from "./CollectionVideoList.jsx";
 import Annotate from "../Annotate.jsx"
 
+import Hotkeys from 'react-hot-keys';
+
 const styles = theme => ({
   videoContainer: {
     top: "50px",
@@ -79,8 +81,6 @@ class videoCollection extends Component {
     // add event listener for closing or reloading window
     window.addEventListener("beforeunload", this.handleUnload);
 
-    // add event listener for different key presses
-    document.addEventListener("keydown", this.handleKeyDown);
     this.handleUnload = Annotate.handleUnload;
     this.skipVideoTime = Annotate.skipVideoTime;
     this.playPause = Annotate.playPause;
@@ -109,24 +109,22 @@ class videoCollection extends Component {
     this.updateCheckpoint(false, false);
     this.state.socket.disconnect();
     window.removeEventListener("beforeunload", this.handleUnload);
-    document.removeEventListener("keydown", this.handleKeyDown);
   };
 
-  handleKeyDown = e => {
-    if (e.target !== document.body) {
-      return;
-    }
-    if (e.code === "Space") {
-      e.preventDefault();
-      Annotate.playPause();
-    }
-    if (e.code === "ArrowRight") {
-      e.preventDefault();
-      Annotate.skipVideoTime(1);
-    }
-    if (e.code === "ArrowLeft") {
-      e.preventDefault();
-      Annotate.skipVideoTime(-1);
+  handleKeyDown = (keyName, e, handle) => {
+    e.preventDefault();
+    switch (keyName) {
+      case "space":
+        Annotate.playPause();
+        break;
+      case "right":
+        Annotate.skipVideoTime(1);
+        break;
+      case "left":
+        Annotate.skipVideoTime(-1);
+        break;
+      default:
+        return;
     }
   };
 
@@ -148,7 +146,7 @@ class videoCollection extends Component {
         Authorization: "Bearer " + localStorage.getItem("token")
       }
     };
-    return axios.get("/api/videoCollections", config).then(res => {
+    return axios.get("/api/collections/videos", config).then(res => {
       this.setState(
         {
           collections: res.data
@@ -167,10 +165,10 @@ class videoCollection extends Component {
     return axios.get("/api/videos", config).then(res => {
       this.setState(
         {
-          startedVideos: res.data[0].rows,
-          unwatchedVideos: res.data[1].rows,
-          watchedVideos: res.data[2].rows,
-          inProgressVideos: res.data[3].rows
+          startedVideos: res.data.startedVideos,
+          unwatchedVideos: res.data.unwatchedVideos,
+          watchedVideos: res.data.watchedVideos,
+          inProgressVideos: res.data.inProgressVideos
         },
         callback
       );
@@ -195,7 +193,7 @@ class videoCollection extends Component {
       if (result.value) {
         try {
           let response = await axios.delete(
-            "/api/videoCollection/" + id,
+            "/api/collections/videos/" + id,
             config
           );
           if (response.status === 200) {
@@ -258,7 +256,7 @@ class videoCollection extends Component {
     };
     // update SQL database
     return axios
-      .put("/api/checkpoints/" + this.state.currentVideo.id, body, config)
+      .put("/api/videos/checkpoints/" + this.state.currentVideo.id, body, config)
       .then(res => {
         if (reloadVideos) {
           return this.loadVideos(doneClicked ? this.getCurrentVideo : null);
@@ -335,7 +333,7 @@ class videoCollection extends Component {
             }
           };
           try {
-            await axios.post("/api/videoCollection", body, config);
+            await axios.post("/api/collections/videos", body, config);
             Swal.fire({
               title: "Collection Created!",
               confirmButtonText: "Lovely!"
@@ -358,7 +356,7 @@ class videoCollection extends Component {
     };
     try {
       axios
-        .post("/api/videoCollection/" + id, body, config)
+        .post("/api/collections/videos/" + id, body, config)
         .then(res => {
           this.toggleDrawer();
           Swal.fire({
@@ -397,6 +395,10 @@ class videoCollection extends Component {
     }
     return (
       <React.Fragment>
+        <Hotkeys
+          keyName="space, right, left"
+          onKeyDown={this.handleKeyDown.bind(this)}
+        / >
         <CollectionList
           collType="video"
           data={this.state.collections}

@@ -18,7 +18,7 @@ const styles = theme => ({
   }
 });
 
-class VerifySelectUnsure extends React.Component {
+class SelectUnsure extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,7 +38,7 @@ class VerifySelectUnsure extends React.Component {
     const { classes, value, handleChangeSwitch } = this.props;
 
     return (
-      <>
+      <div>
         <Typography>Select unsure</Typography>
         <FormControl component="fieldset" className={classes.formControl}>
           <FormGroup>
@@ -57,13 +57,13 @@ class VerifySelectUnsure extends React.Component {
             />
           </FormGroup>
         </FormControl>
-      </>
+      </div>
     );
   }
 }
 
-VerifySelectUnsure.propTypes = {
+SelectUnsure.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(VerifySelectUnsure);
+export default withStyles(styles)(SelectUnsure);
