@@ -175,5 +175,8 @@ CREATE TABLE training_progress (
   steps_per_epoch integer
 );
 
-
-INSERT INTO users(username, password, admin) VALUES('admin', '$2b$10$cTBlJX8aQC8joysM78ZTtuAj5vW55Trwuy6kYe.PbY/m1wzQFsA1a', true);
+/*
+#INSERT INTO users(username, password, admin) VALUES('admin', '$2b$10$cTBlJX8aQC8joysM78ZTtuAj5vW55Trwuy6kYe.PbY/m1wzQFsA1a', true);
+think new line replacing this line will create "a default 'admin' user with the password '123'." like the userguide speaks of
+*/
+INSERT INTO users(username, password, admin) VALUES('admin', '123', true); 
