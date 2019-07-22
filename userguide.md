@@ -115,7 +115,7 @@ Don't worry about your secrets being exposed, ```.env``` is added to ```.gitigno
 We used Elastic Beanstalk to deploy and manage our web app. Follow these instructions to be able to deploy and manage the web app.
 
 1. You will need to install and configure the EB CLI.
-See [Install the EB CLI](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install.html) and [Configure the EB CLI](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-configuration.html). When configuring, make sure you enter 'video-annotation-tool' as the name of the folder in step 4.
+See [Install the EB CLI](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install.html)[or see on Mac with homebrew or pip Installation Guide here](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install-osx.html) and [Configure the EB CLI](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-configuration.html). When configuring, make sure you enter 'video-annotation-tool' as the name of the folder in step 4.
 
 2. Navigate to video-annotation-tool and create an eb environment by running  
 `~/video-annotation-tool$ eb init`  
